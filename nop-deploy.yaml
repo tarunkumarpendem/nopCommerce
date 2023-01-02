@@ -1,0 +1,44 @@
+--- 
+apiVersion: apps/v1
+metadata:
+  name: nopCommerce
+  labels:
+    app: nopCommerce
+    tech: dotnet
+kind: Deployment
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nopCommerce
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: nopCommerce
+      labels:
+        app: nopCommerce
+    spec:
+      containers:
+        - image: tarunkumarpendem/nop:1.0
+          name: nopCommerce
+          ports:
+            - containerPort: 80
+              name: nginx-web-port
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/www
+              name: nop-vol
+      volumes: 
+        - persistentVolumeClaim:
+            claimName: nop-pvc
+                         
+
+                  
+
+  
+  
