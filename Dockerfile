@@ -18,8 +18,8 @@ EXPOSE 80 3306
 
 
 
-# D
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 as build
+# Database
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 as db
 LABEL Author="tarun"
 LABEL app="nopCommerce"
 ENV MYSQL_ROOT_PASSWORD = "rootroot"
@@ -31,9 +31,10 @@ RUN apt update && \
     apt install nginx unzip -y && \
     mkdir /var/www/nopCommerce && \
     cd /var/www/nopCommerce
-ADD https://github.com/nopSolutions/nopCommerce/releases/download/release-4.50.3/nopCommerce_4.50.3_NoSource_linux_x64.zip .
+ADD https://github.com/nopSolutions/nopCommerce/releases/download/release-4.50.3/nopCommerce_4.50.3_NoSource_linux_x64.zip  /var/www/nopCommerce
+WORKDIR /var/www/nopCommerce
 RUN unzip ./nopCommerce_4.50.3_NoSource_linux_x64.zip && \ 
-    mkdir logs && \
+    mkdir bin logs && \
     cd .. && \
     chgrp -R www-data nopCommerce && \
     chown -R www-data nopCommerce
